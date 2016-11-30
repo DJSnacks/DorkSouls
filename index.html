@@ -1,0 +1,298 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>DorkSouls</title>
+		<style>
+		div.repositionRt {
+		position: relative;
+		left: 300px;
+		}
+		div.repositionUp {
+		position: relative;
+		bottom: 220px;
+		}
+		div.repositionHP {
+		position: relative;
+		bottom: 20px;
+		left:40px;
+		}
+		div.repositionplayerbar {
+		position: fixed;
+		top: 250px;
+		left: 360px;
+		}
+		div.repositionenemy {
+		position: fixed;
+		top: 50px;
+		left: 600px;
+		}
+		div.repositionenemyhp {
+		position: fixed;
+		top: 250px;
+		left: 620px;
+		}
+		div.attackbutton {
+		position: fixed;
+		top: 300px;
+		left: 300px;
+		}		
+		div.counterbutton {
+		position: fixed;
+		top: 300px;
+		left: 400px;
+		}	
+		
+		div.UI{
+		visibility:hidden;
+		}
+		div.log{
+		position: fixed;
+		top: 350px;
+		left: 400px;
+		}	
+
+		
+		
+		
+		</style>
+    </head>
+    <body>
+
+
+	<td>Name: <input id="Name" type="text"></td>
+	<p>Gender:&nbsp &nbsp Male<input type="radio" name="gender" id="mradio" onClick="changeImage()" checked/> Female<input type="radio" name="gender" onClick ="changeImage()" id="fradio" />
+	
+	<figure>
+		<div class="repositionRt"> <img src = "malepro.png"  id="characterDS"  width = "150" height = "200" alt = "You">
+		</figure></p>
+	
+</div>
+
+	<div class = "repositionUp">
+	<p>Health:&nbsp &nbsp   <input type = "range" min = "0" max = "10" value = "0" id= "Health" oninput = "outputHealth(value)"/> <output for="Health" id = "StatHealth"> 0 </output> </p>
+	<p>Strength: <input type = "range" min = "0" max = "10" value = "0" id= "Strength" oninput = "outputStrength(value)"/> <output for="Strength" id = "StatStrength"> 0 </output></p>
+	<p>Intellect: <input type = "range" min = "0" max = "10" value = "0" id= "Intellect" oninput = "outputIntellect(value)"/> <output for="Intellect" id = "StatIntellect"> 0 </output></p>
+	<p>Defense: <input type = "range" min = "0" max = "10" value = "0" id= "Defense" oninput = "outputDefense(value)"/> <output for="Defense" id = "StatDefense"> 0 </output></p>
+	
+
+	<button type ="button" onClick="start(value)">Start Game With Current Stats</button>
+	</div>
+
+<div class="UI" id="start">
+<div class="repositionplayerbar">
+<p><meter Min = "0" Max = "10" Value = "0" id="playerhp"></meter></p>
+</div>
+<div class="repositionplayerbar">
+<p id="hpcount"></p>
+</div>
+
+<div class="repositionenemyhp">
+<p><meter min = "0" max = "10" value = "0" id="enemyhp"></meter></p>
+</div>
+
+<figure>
+		<div class="repositionenemy"> <img src = "white.png" id="enemyDS"  width = "150" height = "200" alt = "Them">
+</figure>
+
+<div class="repositionenemyhp">
+<p id="ehpcount"></p>
+</div>
+
+
+		<div class="attackbutton">
+		<button type ="button" onClick=attack(value) Name = "UI" id = "attackbutton">Attack</button>
+		</div>
+		<div class="counterbutton">
+		<button type ="button" onClick=counter(value) id="counterbutton">Counter</button>
+		</div>
+</div>
+
+<div class = "log">
+<p id = "line1"></p>
+<p id = "line2"></p>
+<p id = "line3"></p>
+<p id = "line4"></p>
+</div>
+
+ <script type='text/javascript'>
+		function outputHealth(stat) {
+		document.querySelector('#StatHealth').value = stat;
+		}
+		function outputStrength(stat) {
+		document.querySelector('#StatStrength').value = stat;
+		}
+		function outputIntellect(stat) {
+		document.querySelector('#StatIntellect').value = stat;
+		}
+		function outputDefense(stat) {
+		document.querySelector('#StatDefense').value = stat;
+		}
+		function changeImage() {
+		var image = document.getElementById('characterDS');
+		if(document.getElementById('fradio').checked) {
+        image.src = "femalepro.png";
+			}else{
+		image.src = "malepro.png";
+				}
+		}
+		function start(value) {
+		var hp = document.getElementById('Health').value*50
+		var ehp = 200
+		var meter = document.getElementById('playerhp');
+		var emeter = document.getElementById('enemyhp');
+		meter.value = hp
+		meter.max = hp
+		emeter.value = ehp
+		emeter.max = ehp
+		changeImage()
+		
+		document.getElementById('hpcount').innerHTML = hp
+		document.getElementById('ehpcount').innerHTML = 200
+		document.getElementById('enemyDS').src = "unreasonablylargeswordguy.png"
+		document.getElementById('enemyDS').value = 1
+		document.getElementById('start').style.visibility= "visible"
+		document.getElementById('attackbutton').onclick = function(){attack(value)};
+		document.getElementById('counterbutton').onclick = function(){counter(value)};
+		}
+		
+		function attack(value){
+		var damage = Math.round(document.getElementById('Strength').value*Math.floor(Math.random()*(12-8+1)+8));
+		var enemy = document.getElementById('enemyDS');
+		var meter = document.getElementById('playerhp');
+		var emeter = document.getElementById('enemyhp');
+		var player = document.getElementById('Name').value;
+		var mitigation = 1 - document.getElementById('Defense').value/15
+	
+		if(enemy.value == 1){
+		var edamage = Math.round(Math.floor(Math.random()*(40-30+1)+30)* mitigation);
+		var ename = "Unreasonably Large Sword Guy";
+		} else if(enemy.value == 2){
+		var edamage = Math.round(Math.floor(Math.random()*(60-40+1)+40)* mitigation);
+		var ename = "WIPBoss";
+		} else {
+		var edamage = Math.round(Math.floor(Math.random()*(75-45+1)+45)* mitigation);
+		var ename = "Definitely Not Prof Masukawa"
+		}		
+		meter.value = meter.value - edamage
+		emeter.value = emeter.value - damage
+		document.getElementById('hpcount').innerHTML = meter.value
+		document.getElementById('ehpcount').innerHTML = emeter.value
+		document.getElementById('line4').innerHTML = document.getElementById('line3').innerHTML
+		document.getElementById('line3').innerHTML = document.getElementById('line2').innerHTML
+		document.getElementById('line2').innerHTML = document.getElementById('line1').innerHTML
+		document.getElementById('line1').innerHTML = player + " takes " + edamage + " damage from " + ename + " and attacks for " + damage + " damage."
+		
+		if(meter.value == 0){
+		document.getElementById('line1').innerHTML = "You took fatal damage and have restarted your journey."
+		document.getElementById('attackbutton').onclick = null;
+		document.getElementById('counterbutton').onclick = null;
+		}
+		if(emeter.value ==0){
+		nextboss()
+		}
+		}
+		
+		function counter(value){
+		var damage = Math.round(document.getElementById('Strength').value*Math.floor(Math.random()*(24-16+1)+16));
+		var enemy = document.getElementById('enemyDS');
+		var meter = document.getElementById('playerhp');
+		var emeter = document.getElementById('enemyhp');
+		var player = document.getElementById('Name').value;
+		var mitigation = 1 - document.getElementById('Defense').value/15
+	
+		if(enemy.value == 1){
+		var edamage = Math.round(Math.floor(Math.random()*(40-30+1)+30)* mitigation);
+		var ename = "Unreasonably Large Sword Guy";
+		} else if(enemy.value == 2){
+		var edamage = Math.round(Math.floor(Math.random()*(60-40+1)+40)* mitigation);
+		var ename = "WIPBoss";
+		} else {
+		var edamage = Math.round(Math.floor(Math.random()*(75-45+1)+45)* mitigation);
+		var ename = "Definitely Not Prof Masukawa"
+		}
+		if(Math.floor(Math.random()*(2-1+1)+1) == 1 ){
+		emeter.value = emeter.value - damage
+		document.getElementById('ehpcount').innerHTML = emeter.value
+		document.getElementById('line4').innerHTML = document.getElementById('line3').innerHTML
+		document.getElementById('line3').innerHTML = document.getElementById('line2').innerHTML
+		document.getElementById('line2').innerHTML = document.getElementById('line1').innerHTML
+		document.getElementById('line1').innerHTML = player + " successfully counters and takes 0 damage. Counters enemy for " + damage + " damage."
+		} else {
+		
+		meter.value = meter.value - edamage
+		document.getElementById('hpcount').innerHTML = meter.value
+		document.getElementById('line4').innerHTML = document.getElementById('line3').innerHTML
+		document.getElementById('line3').innerHTML = document.getElementById('line2').innerHTML
+		document.getElementById('line2').innerHTML = document.getElementById('line1').innerHTML
+		document.getElementById('line1').innerHTML = player + " fails to counter and takes " + edamage + " damage from " + ename + ". The blow prevents attacking this turn."
+		
+		}
+		if(meter.value == 0){
+		document.getElementById('line1').innerHTML = "You took fatal damage and have restarted your journey."
+		document.getElementById('attackbutton').onclick = null;
+		document.getElementById('counterbutton').onclick = null;
+		}
+		if(emeter.value ==0){
+		nextboss()
+		}
+		}
+		
+		
+		function nextboss(){
+		if(document.getElementById('enemyDS').value == 3){
+		document.getElementById('enemyDS').src = "white.png";
+		document.getElementById('characterDS').src = "win.png";
+		document.getElementById('line4').innerHTML = document.getElementById('line3').innerHTML
+		document.getElementById('line3').innerHTML = document.getElementById('line2').innerHTML
+		document.getElementById('line2').innerHTML = document.getElementById('line1').innerHTML
+		document.getElementById('line1').innerHTML = "Hey! You won!"
+		document.getElementById('attackbutton').onclick = null;
+		document.getElementById('counterbutton').onclick = null;
+		
+		}else if(document.getElementById('enemyDS').value == 2){
+		document.getElementById('enemyDS').src = "definitelynotprofmasukawa.png";
+		var hp = document.getElementById('Health').value*50;
+		var ehp = 500;
+		var meter = document.getElementById('playerhp');
+		var emeter = document.getElementById('enemyhp');
+		meter.value = hp;
+		meter.max = hp;
+		emeter.value = ehp;
+		emeter.max = ehp;
+		document.getElementById('hpcount').innerHTML = hp;
+		document.getElementById('ehpcount').innerHTML = 500;
+		document.getElementById('enemyDS').value = 3
+		document.getElementById('line4').innerHTML = document.getElementById('line3').innerHTML
+		document.getElementById('line3').innerHTML = document.getElementById('line2').innerHTML
+		document.getElementById('line2').innerHTML = document.getElementById('line1').innerHTML
+		document.getElementById('line1').innerHTML = "You have slain the WIP Boss. New enemy approaching."
+		
+		} else {
+		document.getElementById('enemyDS').src = "WIPBoss.png";
+		var hp = document.getElementById('Health').value*50
+		var ehp = 350
+		var meter = document.getElementById('playerhp');
+		var emeter = document.getElementById('enemyhp');
+		meter.value = hp
+		meter.max = hp
+		emeter.value = ehp
+		emeter.max = ehp
+		document.getElementById('enemyDS').value = 2
+		
+		document.getElementById('hpcount').innerHTML = hp
+		document.getElementById('ehpcount').innerHTML = 350
+		document.getElementById('line4').innerHTML = document.getElementById('line3').innerHTML
+		document.getElementById('line3').innerHTML = document.getElementById('line2').innerHTML
+		document.getElementById('line2').innerHTML = document.getElementById('line1').innerHTML
+		document.getElementById('line1').innerHTML = "You have slain Unreasonably Large Sword Guy. New enemy approaching."
+		}
+		}
+        </script>
+		
+    </body>
+</html>
+
+
+
